@@ -1,4 +1,4 @@
-import mongoose, { Schema, Document } from 'mongoose';
+import mongoose, { Schema, type Document } from 'mongoose';
 
 export interface IFeedback extends Document {
     title: string;
@@ -19,34 +19,34 @@ export interface IFeedback extends Document {
 
 const FeedbackSchema: Schema = new Schema(
     {
-        title: { type: String, required: true, maxlength: 120 }, // [cite: 101]
-        description: { type: String, required: true, minlength: 20 }, // [cite: 102]
+        title: { type: String, required: true, maxlength: 120 },
+        description: { type: String, required: true, minlength: 20 },
         category: {
             type: String,
             enum: ['Bug', 'Feature Request', 'Improvement', 'Other'],
             required: true
-        }, // [cite: 103]
+        },
         status: {
             type: String,
             enum: ['New', 'In Review', 'Resolved'],
             default: 'New'
-        }, // [cite: 103]
-        submitterName: { type: String, required: false }, // [cite: 104]
+        },
+        submitterName: { type: String, required: false },
         submitterEmail: {
             type: String,
             required: false,
             match: [/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/, 'Please fill a valid email address']
-        }, // [cite: 105]
+        },
 
-        // AI fields populated after Gemini responds [cite: 106]
-        ai_category: { type: String }, // [cite: 107]
-        ai_sentiment: { type: String, enum: ['Positive', 'Neutral', 'Negative'] }, // [cite: 108]
-        ai_priority: { type: Number, min: 1, max: 10 }, // [cite: 109]
-        ai_summary: { type: String }, // [cite: 110]
-        ai_tags: { type: [String] }, // [cite: 111]
-        ai_processed: { type: Boolean, default: false }, // [cite: 112]
+        // AI fields populated after Gemini responds
+        ai_category: { type: String },
+        ai_sentiment: { type: String, enum: ['Positive', 'Neutral', 'Negative'] },
+        ai_priority: { type: Number, min: 1, max: 10 },
+        ai_summary: { type: String },
+        ai_tags: { type: [String] },
+        ai_processed: { type: Boolean, default: false },
     },
-    { timestamps: true } // Auto-manages createdAt and updatedAt [cite: 113, 114, 115]
+    { timestamps: true } // Auto-manages createdAt and updatedAt
 );
 
 // Required Indexes for query performance 

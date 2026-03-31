@@ -1,7 +1,8 @@
-import express, { Application, Request, Response } from 'express';
+import express, { type Application, type Request, type Response } from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import feedbackRoutes from './routes/feedback.routes.js';
 
 // Load environment variables from .env file
 dotenv.config();
@@ -34,10 +35,12 @@ const startServer = async () => {
     // Connect to the database first
     await connectDB();
 
+    app.use('/api/feedback', feedbackRoutes);
+
     // Health check route (Useful for testing before adding real routes)
-    app.get('/api/health', (req: Request, res: Response) => {
-        res.status(200).json({ success: true, message: 'FeedPulse API is running' });
-    });
+app.get('/api/health', (req: Request, res: Response) => {
+    res.status(200).json({ success: true, message: 'FeedPulse API is running' });
+});
 
     // Listen for requests
     app.listen(PORT, () => {
