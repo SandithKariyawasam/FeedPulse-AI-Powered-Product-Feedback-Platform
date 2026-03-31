@@ -46,10 +46,9 @@ const FeedbackSchema: Schema = new Schema(
         ai_tags: { type: [String] },
         ai_processed: { type: Boolean, default: false },
     },
-    { timestamps: true } // Auto-manages createdAt and updatedAt
+    { timestamps: true }
 );
 
-// Required Indexes for query performance 
 FeedbackSchema.index({ status: 1 });
 FeedbackSchema.index({ category: 1 });
 FeedbackSchema.index({ ai_priority: -1 });

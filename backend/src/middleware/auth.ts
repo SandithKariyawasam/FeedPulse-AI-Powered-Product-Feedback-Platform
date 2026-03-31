@@ -10,7 +10,7 @@ dotenv.config();
 export const verifyToken = (req: Request, res: Response, next: NextFunction) => {
     try {
         const authHeader = req.headers.authorization;
-        
+
         if (!authHeader || !authHeader.startsWith('Bearer ')) {
             return res.status(401).json({ success: false, message: 'Unauthorized: No token provided' });
         }
@@ -23,8 +23,7 @@ export const verifyToken = (req: Request, res: Response, next: NextFunction) => 
         }
 
         const decoded = jwt.verify(token, secret!) as any;
-        
-        // Add basic admin check (since we only have one admin)
+
         if (decoded && decoded.isAdmin) {
             next();
         } else {

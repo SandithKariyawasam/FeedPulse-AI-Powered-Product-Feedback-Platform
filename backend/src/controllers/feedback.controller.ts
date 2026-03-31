@@ -11,7 +11,6 @@ export const createFeedback = async (req: Request, res: Response) => {
             return res.status(400).json({ success: false, message: 'Missing required fields' });
         }
 
-        // Create the feedback record first (without AI fields)
         const feedback = new Feedback({
             title,
             description,
@@ -20,13 +19,8 @@ export const createFeedback = async (req: Request, res: Response) => {
             submitterEmail,
         });
 
-        // Trigger AI Analysis
-        // We'll process it before saving for better immediate feedback, 
-        // or we could save and then update in the background. 
-        // For this project, we'll wait for AI response to show users the immediate clarity.
         const aiAnalysis = await analyzeFeedback(title, description);
         
-        // Populate AI fields
         feedback.ai_category = aiAnalysis.ai_category;
         feedback.ai_sentiment = aiAnalysis.ai_sentiment;
         feedback.ai_priority = aiAnalysis.ai_priority;

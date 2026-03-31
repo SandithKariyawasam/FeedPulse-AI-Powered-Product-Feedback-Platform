@@ -11,7 +11,7 @@ export default function InsightCard() {
     const fetchSummary = async () => {
         setLoading(true);
         try {
-            const response = await fetch('http://localhost:4000/api/feedback/summary');
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/api/feedback/summary`);
             const result = await response.json();
             if (result.success) {
                 setSummary(result.data);

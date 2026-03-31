@@ -51,14 +51,13 @@ export default function AdminDashboard() {
         }
 
         try {
-            const response = await fetch('http://localhost:4000/api/feedback', {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/api/feedback`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
             const result = await response.json();
             if (result.success) {
                 setFeedbacks(result.data);
             } else {
-                // If unauthorized, go back to login
                 if (response.status === 401 || response.status === 403) {
                     router.push('/admin/login');
                 }
@@ -74,13 +73,12 @@ export default function AdminDashboard() {
         setRetriggering(id);
         const token = localStorage.getItem('adminToken');
         try {
-            const response = await fetch(`http://localhost:4000/api/feedback/retrigger/${id}`, {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/api/feedback/retrigger/${id}`, {
                 method: 'PATCH',
                 headers: { 'Authorization': `Bearer ${token}` }
             });
             const result = await response.json();
             if (result.success) {
-                // Update specific item in state
                 setFeedbacks(prev => prev.map(f => f._id === id ? result.data : f));
             }
         } catch (error) {
@@ -101,7 +99,7 @@ export default function AdminDashboard() {
         setDeleting(id);
         const token = localStorage.getItem('adminToken');
         try {
-            const response = await fetch(`http://localhost:4000/api/feedback/${id}`, {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/api/feedback/${id}`, {
                 method: 'DELETE',
                 headers: { 'Authorization': `Bearer ${token}` }
             });
@@ -120,7 +118,7 @@ export default function AdminDashboard() {
         setUpdatingStatus(id);
         const token = localStorage.getItem('adminToken');
         try {
-            const response = await fetch(`http://localhost:4000/api/feedback/status/${id}`, {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/api/feedback/status/${id}`, {
                 method: 'PATCH',
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -166,7 +164,6 @@ export default function AdminDashboard() {
         currentPage * itemsPerPage
     );
 
-    // Reset pagination when filters change
     useEffect(() => {
         setCurrentPage(1);
     }, [search, filterCategory, filterStatus, sortBy]);
@@ -188,7 +185,6 @@ export default function AdminDashboard() {
         }
     };
 
-    // Calculate Stats
     const stats = {
         total: feedbacks.length,
         open: feedbacks.filter(f => f.status !== 'Resolved').length,
@@ -214,7 +210,6 @@ export default function AdminDashboard() {
 
     return (
         <div className="min-h-screen bg-white dark:bg-black p-6 md:p-12 lg:p-20 selection:bg-amber-100 dark:selection:bg-amber-900/40">
-            {/* Header */}
             <div className="max-w-7xl mx-auto mb-16 flex flex-col md:flex-row md:items-end justify-between gap-8">
                 <div>
                     <div className="flex items-center gap-3 mb-4">
@@ -232,8 +227,6 @@ export default function AdminDashboard() {
                     Logout Session
                 </button>
             </div>
-
-            {/* Stats Bar */}
             <div className="max-w-7xl mx-auto mb-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 {[
                     { label: 'Total Feedback', value: stats.total, icon: <MessageSquare className="w-6 h-6" />, color: 'bg-amber-500' },
@@ -258,8 +251,6 @@ export default function AdminDashboard() {
                     </motion.div>
                 ))}
             </div>
-
-            {/* Filter Bar */}
             <div className="max-w-7xl mx-auto mb-10 space-y-6">
                 <div className="flex flex-col md:flex-row items-center gap-4">
                     <div className="relative flex-1 group w-full">
@@ -326,8 +317,6 @@ export default function AdminDashboard() {
                     </div>
                 </div>
             </div>
-
-            {/* Content List */}
             <div className="max-w-7xl mx-auto space-y-6">
                 <AnimatePresence initial={false} mode="wait">
                     {paginatedFeedbacks.map((f, idx) => (
@@ -437,8 +426,6 @@ export default function AdminDashboard() {
                     </div>
                 )}
             </div>
-
-            {/* Pagination Controls */}
             {totalPages > 1 && (
                 <div className="max-w-7xl mx-auto mt-12 flex items-center justify-between">
                     <button

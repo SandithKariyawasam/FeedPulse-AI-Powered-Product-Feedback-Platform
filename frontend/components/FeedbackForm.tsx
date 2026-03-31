@@ -36,7 +36,7 @@ export default function FeedbackForm() {
         setErrorMessage('');
 
         try {
-            const response = await fetch('http://localhost:4000/api/feedback', {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/api/feedback`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(formData),
@@ -47,7 +47,6 @@ export default function FeedbackForm() {
             if (result.success) {
                 setStatus('success');
                 setAiResult(result.data);
-                // Reset form
                 setFormData({
                     title: '',
                     description: '',

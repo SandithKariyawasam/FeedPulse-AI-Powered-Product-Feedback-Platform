@@ -64,7 +64,6 @@ export const analyzeFeedback = async (title: string, description: string) => {
     try {
         const model = genAI.getGenerativeModel({
             model: "gemini-2.5-flash",
-            // System instructions help guide the "personality" and behavior
             systemInstruction: "You are an expert product analyst. Analyze user feedback and output structured JSON based on the provided schema. Be objective and prioritize critical bugs or high-impact feature requests."
         });
 
