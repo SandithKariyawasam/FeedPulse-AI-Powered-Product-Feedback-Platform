@@ -107,7 +107,7 @@ The admin dashboard is protected via JWT authentication. Use the `ADMIN_EMAIL` a
 
 ## 🚀 Future Roadmap: What's Next?
 
-If we had more time to evolve FeedPulse, these are the high-impact features we would prioritize:
+If I had more time to evolve FeedPulse, these are the high-impact features I would prioritize:
 
 - **🔗 Real-time Integrations**: Connect FeedPulse to **Slack** or **Discord** to provide instant notifications for high-priority feedback (Priority 8+).
 - **📈 Advanced Analytics View**: Replace the stats bar with a dedicated analytics tab featuring **Recharts** for trend visualization, category distribution, and sentiment over time.
@@ -115,9 +115,3 @@ If we had more time to evolve FeedPulse, these are the high-impact features we w
 - **📥 Data Portability**: Add "Export to CSV" and "Export to PDF" functions to allow admins to share AI-generated summaries with the broader product team.
 - **🔐 User Profiles**: Optional user authentication for feedback submitters to track their own feedback history and receive status updates.
 
----
-
-## 📄 License
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-Developed with ❤️ by the FeedPulse Team.
