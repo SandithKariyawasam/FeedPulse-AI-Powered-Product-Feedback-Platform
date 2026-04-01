@@ -36,7 +36,7 @@ jobs:
         run: npm run build
 
   frontend-check:
-    name: Frontend Lint & Build
+    name: Frontend Build
     runs-on: ubuntu-latest
 
     defaults:

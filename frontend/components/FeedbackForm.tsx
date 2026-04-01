@@ -16,7 +16,11 @@ export default function FeedbackForm() {
         submitterName: '',
         submitterEmail: '',
     });
-    const [aiResult, setAiResult] = useState<any>(null);
+    interface AIResult {
+        ai_summary: string;
+        ai_tags: string[];
+    }
+    const [aiResult, setAiResult] = useState<AIResult | null>(null);
 
     const formatResetTime = (resetTime: string) => {
         if (!resetTime) return 'soon';
@@ -88,7 +92,7 @@ export default function FeedbackForm() {
                         <span className="text-sm font-semibold text-amber-500 uppercase tracking-wider">AI Insights</span>
                     </div>
                     <p className="text-zinc-600 dark:text-zinc-300 mb-4 leading-relaxed italic">
-                        "{aiResult.ai_summary}"
+                        &quot;{aiResult.ai_summary}&quot;
                     </p>
                     <div className="flex flex-wrap gap-2">
                         {aiResult.ai_tags?.map((tag: string) => (

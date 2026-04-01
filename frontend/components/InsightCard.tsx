@@ -4,9 +4,21 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { BarChart3, TrendingUp, AlertTriangle, Lightbulb, Loader2, RefreshCw } from 'lucide-react';
 
+interface Theme {
+    theme: string;
+    count: number;
+    description: string;
+    impact: 'High' | 'Medium' | 'Low';
+}
+
+interface SummaryResult {
+    overall_summary: string;
+    themes: Theme[];
+}
+
 export default function InsightCard() {
     const [loading, setLoading] = useState(false);
-    const [summary, setSummary] = useState<any>(null);
+    const [summary, setSummary] = useState<SummaryResult | null>(null);
 
     const fetchSummary = async () => {
         setLoading(true);
@@ -78,7 +90,7 @@ export default function InsightCard() {
                         </div>
 
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                            {summary.themes?.map((theme: any, idx: number) => (
+                            {summary.themes?.map((theme: Theme, idx: number) => (
                                 <motion.div 
                                     key={idx}
                                     initial={{ opacity: 0, scale: 0.95 }}

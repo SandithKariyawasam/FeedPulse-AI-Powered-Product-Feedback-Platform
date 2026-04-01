@@ -1,19 +1,16 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-    LayoutDashboard,
     LogOut,
     RefreshCw,
     Search,
-    Filter,
     TrendingUp,
     TrendingDown,
     Minus,
     AlertCircle,
-    CheckCircle2,
     Loader2,
     Calendar,
     User,
@@ -29,8 +26,25 @@ import {
     ChevronRight
 } from 'lucide-react';
 
+interface Feedback {
+    _id: string;
+    title: string;
+    description: string;
+    category: 'Bug' | 'Feature Request' | 'Improvement' | 'Other';
+    status: 'New' | 'In Review' | 'Resolved';
+    submitterName?: string;
+    submitterEmail?: string;
+    ai_category?: string;
+    ai_sentiment?: 'Positive' | 'Neutral' | 'Negative';
+    ai_priority: number;
+    ai_summary?: string;
+    ai_tags?: string[];
+    createdAt: string;
+    updatedAt: string;
+}
+
 export default function AdminDashboard() {
-    const [feedbacks, setFeedbacks] = useState<any[]>([]);
+    const [feedbacks, setFeedbacks] = useState<Feedback[]>([]);
     const [loading, setLoading] = useState(true);
     const [retriggering, setRetriggering] = useState<string | null>(null);
     const [deleting, setDeleting] = useState<string | null>(null);
@@ -43,7 +57,7 @@ export default function AdminDashboard() {
     const itemsPerPage = 10;
     const router = useRouter();
 
-    const fetchFeedbacks = async () => {
+    const fetchFeedbacks = useCallback(async () => {
         const token = localStorage.getItem('adminToken');
         if (!token) {
             router.push('/admin/login');
@@ -67,7 +81,7 @@ export default function AdminDashboard() {
         } finally {
             setLoading(false);
         }
-    };
+    }, [router]);
 
     const handleRetrigger = async (id: string) => {
         setRetriggering(id);
@@ -139,7 +153,7 @@ export default function AdminDashboard() {
 
     useEffect(() => {
         fetchFeedbacks();
-    }, []);
+    }, [fetchFeedbacks]);
 
     const filteredFeedbacks = feedbacks.filter(f => {
         const matchesSearch = f.title.toLowerCase().includes(search.toLowerCase()) ||
@@ -319,7 +333,7 @@ export default function AdminDashboard() {
             </div>
             <div className="max-w-7xl mx-auto space-y-6">
                 <AnimatePresence initial={false} mode="wait">
-                    {paginatedFeedbacks.map((f, idx) => (
+                    {paginatedFeedbacks.map((f) => (
                         <motion.div
                             key={f._id}
                             initial={{ opacity: 0, x: 20 }}
@@ -364,7 +378,7 @@ export default function AdminDashboard() {
                                     <div>
                                         <h3 className="text-2xl font-bold text-zinc-900 dark:text-white mb-2 leading-tight">{f.title}</h3>
                                         <div className="bg-zinc-50 dark:bg-white/[0.02] p-6 rounded-2xl border border-zinc-100/50 dark:border-zinc-800/50 italic text-zinc-600 dark:text-zinc-400 leading-relaxed">
-                                            "{f.description}"
+                                            &quot;{f.description}&quot;
                                         </div>
                                     </div>
 
