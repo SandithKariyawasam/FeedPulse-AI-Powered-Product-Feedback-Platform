@@ -16,13 +16,17 @@ export const verifyToken = (req: Request, res: Response, next: NextFunction) => 
         }
 
         const token = authHeader.split(' ')[1];
+        if (!token) {
+            return res.status(401).json({ success: false, message: 'Unauthorized: Malformed token' });
+        }
+
         const secret = process.env.JWT_SECRET;
         if (!secret) {
             console.error('❌ JWT_SECRET is not configured in .env');
             return res.status(500).json({ success: false, message: 'Internal Server Error: Authentication misconfigured' });
         }
 
-        const decoded = jwt.verify(token, secret!) as any;
+        const decoded = jwt.verify(token, secret) as any;
 
         if (decoded && decoded.isAdmin) {
             next();

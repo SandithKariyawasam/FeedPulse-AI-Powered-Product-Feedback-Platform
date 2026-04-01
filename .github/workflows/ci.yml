@@ -1,4 +1,4 @@
-name: CI - Code Quality Check
+name: Code Quality Check
 
 on:
   push:
@@ -8,7 +8,7 @@ on:
 
 jobs:
   backend-check:
-    name: Backend Lint & Build
+    name: Backend Build
     runs-on: ubuntu-latest
     
     defaults:
