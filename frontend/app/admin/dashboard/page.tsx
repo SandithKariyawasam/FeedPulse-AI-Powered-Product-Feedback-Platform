@@ -166,8 +166,8 @@ export default function AdminDashboard() {
         if (sortBy === 'Oldest') return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
         if (sortBy === 'Priority') return (b.ai_priority || 0) - (a.ai_priority || 0);
         if (sortBy === 'Sentiment') {
-            const sentimentScore: any = { 'Positive': 3, 'Neutral': 2, 'Negative': 1 };
-            return (sentimentScore[b.ai_sentiment || 'Neutral']) - (sentimentScore[a.ai_sentiment || 'Neutral']);
+            const sentimentScore: Record<string, number> = { 'Positive': 3, 'Neutral': 2, 'Negative': 1 };
+            return (sentimentScore[b.ai_sentiment || 'Neutral'] || 0) - (sentimentScore[a.ai_sentiment || 'Neutral'] || 0);
         }
         return 0;
     });
@@ -208,7 +208,7 @@ export default function AdminDashboard() {
         mostCommonTag: (() => {
             const tags = feedbacks.flatMap(f => f.ai_tags || []);
             if (tags.length === 0) return 'None';
-            const counts: any = {};
+            const counts: Record<string, number> = {};
             tags.forEach(t => counts[t] = (counts[t] || 0) + 1);
             return Object.keys(counts).reduce((a, b) => counts[a] > counts[b] ? a : b);
         })()
@@ -243,27 +243,30 @@ export default function AdminDashboard() {
             </div>
             <div className="max-w-7xl mx-auto mb-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 {[
-                    { label: 'Total Feedback', value: stats.total, icon: <MessageSquare className="w-6 h-6" />, color: 'bg-amber-500' },
-                    { label: 'Open Items', value: stats.open, icon: <Clock className="w-6 h-6" />, color: 'bg-amber-500' },
-                    { label: 'Avg Priority', value: stats.avgPriority, icon: <Zap className="w-6 h-6" />, color: 'bg-rose-500' },
-                    { label: 'Top Theme', value: stats.mostCommonTag, icon: <Tag className="w-6 h-6" />, color: 'bg-emerald-500' },
-                ].map((stat, i) => (
-                    <motion.div
-                        key={stat.label}
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: i * 0.1 }}
-                        className="bg-white dark:bg-zinc-900 p-8 rounded-[2rem] border border-zinc-100 dark:border-zinc-800 shadow-xl shadow-zinc-200/50 dark:shadow-none flex items-center gap-6"
-                    >
-                        <div className={`w-14 h-14 ${stat.color} rounded-2xl flex items-center justify-center shadow-lg shadow-zinc-100 dark:shadow-none`}>
-                            {React.cloneElement(stat.icon as React.ReactElement, { className: 'w-7 h-7 text-white' } as any)}
-                        </div>
-                        <div>
-                            <p className="text-[10px] font-black uppercase tracking-widest text-zinc-400 mb-1">{stat.label}</p>
-                            <h3 className="text-2xl font-black text-zinc-900 dark:text-white">{stat.value}</h3>
-                        </div>
-                    </motion.div>
-                ))}
+                    { label: 'Total Feedback', value: stats.total, Icon: MessageSquare, color: 'bg-amber-500' },
+                    { label: 'Open Items', value: stats.open, Icon: Clock, color: 'bg-amber-500' },
+                    { label: 'Avg Priority', value: stats.avgPriority, Icon: Zap, color: 'bg-rose-500' },
+                    { label: 'Top Theme', value: stats.mostCommonTag, Icon: Tag, color: 'bg-emerald-500' },
+                ].map((stat, i) => {
+                    const Icon = stat.Icon;
+                    return (
+                        <motion.div
+                            key={stat.label}
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: i * 0.1 }}
+                            className="bg-white dark:bg-zinc-900 p-8 rounded-[2rem] border border-zinc-100 dark:border-zinc-800 shadow-xl shadow-zinc-200/50 dark:shadow-none flex items-center gap-6"
+                        >
+                            <div className={`w-14 h-14 ${stat.color} rounded-2xl flex items-center justify-center shadow-lg shadow-zinc-100 dark:shadow-none`}>
+                                <Icon className="w-7 h-7 text-white" />
+                            </div>
+                            <div>
+                                <p className="text-[10px] font-black uppercase tracking-widest text-zinc-400 mb-1">{stat.label}</p>
+                                <h3 className="text-2xl font-black text-zinc-900 dark:text-white">{stat.value}</h3>
+                            </div>
+                        </motion.div>
+                    );
+                })}
             </div>
             <div className="max-w-7xl mx-auto mb-10 space-y-6">
                 <div className="flex flex-col md:flex-row items-center gap-4">
